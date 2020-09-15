@@ -17,7 +17,7 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.List;
 
-public class SignUp extends AppCompatActivity {
+public class Practice extends AppCompatActivity {
 
     private EditText edt_id,edt_name,edt_father;
     private TextView txtGetData;
@@ -26,7 +26,7 @@ public class SignUp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_practice);
 
         edt_id=findViewById(R.id.edt_id);
         edt_name=findViewById(R.id.edt_name);
@@ -64,15 +64,15 @@ public class SignUp extends AppCompatActivity {
                 public void done(ParseException e) {
                     if(e==null){
                         //Toast.makeText(SignUp.this,"Object is saved",Toast.LENGTH_LONG).show();
-                        FancyToast.makeText(SignUp.this,Student.get("name") + "object is saved",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
+                        FancyToast.makeText(Practice.this,Student.get("name") + "object is saved",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
                     }else {
-                        FancyToast.makeText(SignUp.this,e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                        FancyToast.makeText(Practice.this,e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
 
                     }
                 }
             });
         }catch (Exception e){
-            FancyToast.makeText(SignUp.this,e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+            FancyToast.makeText(Practice.this,e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
 
         }
 
@@ -95,10 +95,10 @@ public class SignUp extends AppCompatActivity {
 
                         }
 
-                        FancyToast.makeText(SignUp.this,allStudent,FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
+                        FancyToast.makeText(Practice.this,allStudent,FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
 
                     }else {
-                        FancyToast.makeText(SignUp.this,e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                        FancyToast.makeText(Practice.this,e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
 
                     }
                 }
