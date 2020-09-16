@@ -1,15 +1,14 @@
 package com.example.instagramclone;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.parse.LogInCallback;
@@ -47,58 +46,61 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginIsPressed(View view){
-        final ProgressDialog progressDialogg=new ProgressDialog(LoginActivity.this);
-        progressDialogg.setMessage("Logging in");
-        progressDialogg.show();
-        ParseUser.logInInBackground(edtLoginEmail.getText().toString(), edtLoginPassword.getText().toString(), new LogInCallback() {
 
-            @Override
-            public void done(ParseUser parseuser, ParseException e) {
-                if(parseuser != null) {
-                    if(parseuser.getBoolean("emailVerified")){
-                        FancyToast.makeText(LoginActivity.this,"Welcome " + parseuser.getUsername() + " !",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
+        try{
+            InputMethodManager inputMethodManager= (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-                        Intent intent =new Intent(LoginActivity.this,HomeActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+        if(edtLoginEmail.getText().toString().equals("") || edtLoginPassword.getText().toString().equals("")){
+            FancyToast.makeText(LoginActivity.this,"Please fil out all fields",FancyToast.LENGTH_LONG,FancyToast.INFO,false).show();
 
-                    }else {
+        }else {
+            final ProgressDialog progressDialogg=new ProgressDialog(LoginActivity.this);
+            progressDialogg.setMessage("Logging in");
+            progressDialogg.show();
+            ParseUser.logInInBackground(edtLoginEmail.getText().toString(), edtLoginPassword.getText().toString(), new LogInCallback() {
 
-                        ParseUser.logOut();
-                        FancyToast.makeText(LoginActivity.this,"Login Fail please verify your email first",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
+                @Override
+                public void done(ParseUser parseuser, ParseException e) {
+                    if(parseuser != null) {
+                        if(parseuser.getBoolean("emailVerified")){
+                            FancyToast.makeText(LoginActivity.this,"Welcome " + parseuser.getUsername() + " !",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
 
-                    }
-                }else{
-
-                    ParseUser.logOut();
-                    FancyToast.makeText(LoginActivity.this,"Login Fail "+e.getMessage()+"please re-try",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
-
-                }
-                progressDialogg.dismiss();
-            }
-        });
-    }
-
-
-    private void alertDisplayer(String title,String message,final boolean error){
-        AlertDialog.Builder builder =new AlertDialog.Builder(LoginActivity.this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.cancel();
-                        if(!error) {
                             Intent intent =new Intent(LoginActivity.this,HomeActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
+
+                        }else {
+
+                            ParseUser.logOut();
+                            FancyToast.makeText(LoginActivity.this,"Login Fail please verify your email first",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
+
                         }
+                    }else{
+
+                        ParseUser.logOut();
+                        FancyToast.makeText(LoginActivity.this,"Login Fail "+e.getMessage()+"please re-try",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
 
                     }
-                });
-        AlertDialog ok = builder.create();
-        ok.show();
+                    progressDialogg.dismiss();
+                }
+            });
+        }
 
+
+    }
+
+
+    public void rootLayoutTappedLogin(View view){
+        try{
+            InputMethodManager inputMethodManager= (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private String getColoredSpanned(String text, String color) {

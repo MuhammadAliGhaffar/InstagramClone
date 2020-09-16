@@ -1,13 +1,12 @@
 package com.example.instagramclone;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.parse.ParseException;
@@ -33,62 +32,59 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
     public void signupIsPressed(View view){
+
+        if(edtSignUpUsername.getText().toString().equals("") || edtSignUpEmail.getText().toString().equals("") || edtSignUpPassword.getText().toString().equals("")){
+            FancyToast.makeText(SignUpActivity.this,"Please fil out all fields",FancyToast.LENGTH_LONG,FancyToast.INFO,false).show();
+
+        }else{
+            try{
+                //Sign up with parse
+                ParseUser user =new ParseUser();
+
+                user.setUsername(edtSignUpUsername.getText().toString());
+                user.setEmail(edtSignUpEmail.getText().toString());
+                user.setPassword(edtSignUpPassword.getText().toString());
+
+                final ProgressDialog progressDialog=new ProgressDialog(SignUpActivity.this);
+                progressDialog.setMessage("Signing up "+edtSignUpUsername.getText().toString());
+                progressDialog.show();
+                user.signUpInBackground(new SignUpCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e==null){
+
+                            ParseUser.logOut();
+                            FancyToast.makeText(SignUpActivity.this,"Account Created Successfully please verify your email before Login",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
+
+                            Intent intent =new Intent(SignUpActivity.this,LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+                        }
+                        else{
+
+                            FancyToast.makeText(SignUpActivity.this,"Error Account Creation failed account could not be created :"+e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
+
+                        }
+                        progressDialog.dismiss();
+                    }
+                });
+
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+    public void rootLayoutTappedSignUp(View view){
         try{
-            //Sign up with parse
-            ParseUser user =new ParseUser();
-
-            user.setUsername(edtSignUpUsername.getText().toString());
-            user.setEmail(edtSignUpEmail.getText().toString());
-            user.setPassword(edtSignUpPassword.getText().toString());
-
-            final ProgressDialog progressDialog=new ProgressDialog(SignUpActivity.this);
-            progressDialog.setMessage("Signing up "+edtSignUpUsername.getText().toString());
-            progressDialog.show();
-            user.signUpInBackground(new SignUpCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if(e==null){
-
-                        ParseUser.logOut();
-                        FancyToast.makeText(SignUpActivity.this,"Account Created Successfully please verify your email before Login",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
-
-                        Intent intent =new Intent(SignUpActivity.this,LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-
-                    }
-                    else{
-
-                        FancyToast.makeText(SignUpActivity.this,"Error Account Creation failed account could not be created :"+e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
-
-                    }
-                    progressDialog.dismiss();
-                }
-            });
-
-        } catch (Exception e){
+            InputMethodManager inputMethodManager= (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    private void alertDisplayer(String title,String message,final boolean error){
-        AlertDialog.Builder builder =new AlertDialog.Builder(SignUpActivity.this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.cancel();
-                        if(!error) {
-                            Intent intent =new Intent(SignUpActivity.this,LoginActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-
-                    }
-                });
-        AlertDialog ok = builder.create();
-        ok.show();
-
-    }
 }
