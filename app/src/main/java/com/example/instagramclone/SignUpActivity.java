@@ -1,5 +1,6 @@
 package com.example.instagramclone;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +27,10 @@ public class SignUpActivity extends AppCompatActivity {
         edtSignUpEmail=findViewById(R.id.edtSignUpEmail);
         edtSignUpPassword=findViewById(R.id.edtSignUpPassword);
 
+        if(ParseUser.getCurrentUser() != null){
+            ParseUser.getCurrentUser().logOut();
+        }
+
     }
     public void signupIsPressed(View view){
         try{
@@ -36,6 +41,9 @@ public class SignUpActivity extends AppCompatActivity {
             user.setEmail(edtSignUpEmail.getText().toString());
             user.setPassword(edtSignUpPassword.getText().toString());
 
+            final ProgressDialog progressDialog=new ProgressDialog(SignUpActivity.this);
+            progressDialog.setMessage("Signing up "+edtSignUpUsername.getText().toString());
+            progressDialog.show();
             user.signUpInBackground(new SignUpCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -54,6 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
                         FancyToast.makeText(SignUpActivity.this,"Error Account Creation failed account could not be created :"+e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
 
                     }
+                    progressDialog.dismiss();
                 }
             });
 

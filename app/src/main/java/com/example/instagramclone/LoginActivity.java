@@ -1,5 +1,6 @@
 package com.example.instagramclone;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,13 +47,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginIsPressed(View view){
+        final ProgressDialog progressDialogg=new ProgressDialog(LoginActivity.this);
+        progressDialogg.setMessage("Logging in");
+        progressDialogg.show();
         ParseUser.logInInBackground(edtLoginEmail.getText().toString(), edtLoginPassword.getText().toString(), new LogInCallback() {
+
             @Override
             public void done(ParseUser parseuser, ParseException e) {
                 if(parseuser != null) {
                     if(parseuser.getBoolean("emailVerified")){
-
-                        FancyToast.makeText(LoginActivity.this,"Welcome " + edtLoginEmail.getText().toString() + "!",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
+                        FancyToast.makeText(LoginActivity.this,"Welcome " + parseuser.getUsername() + " !",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
 
                         Intent intent =new Intent(LoginActivity.this,HomeActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -70,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                     FancyToast.makeText(LoginActivity.this,"Login Fail "+e.getMessage()+"please re-try",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
 
                 }
+                progressDialogg.dismiss();
             }
         });
     }
