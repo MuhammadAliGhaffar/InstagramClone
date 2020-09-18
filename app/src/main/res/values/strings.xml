@@ -5,4 +5,7 @@
     <string name="app_id">3niRSupGbD8wz1rwzkfAmczbQSjVmXlLxGuXHYWY</string>
     <string name="client_key">oF5GVlveHPuM1dgN8TESycPvaSrs1SLKSnqCZkKe</string>
     <string name="parse_api_address">https://parseapi.back4app.com/</string>
+    <string name="users">Users</string>
+    <string name="Upload">Upload</string>
+    <string name="profile">Profile</string>
 </resources>

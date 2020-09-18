@@ -37,6 +37,13 @@ public class LoginActivity extends AppCompatActivity {
         edtLoginEmail=findViewById(R.id.edtLoginEmail);
         edtLoginPassword=findViewById(R.id.edtLoginPassword);
 
+        if(ParseUser.getCurrentUser() != null){
+         //   ParseUser.getCurrentUser().logOut();
+            Intent intent =new Intent(LoginActivity.this,HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
     }
 
     public void takeMeToSignUp(View view){
