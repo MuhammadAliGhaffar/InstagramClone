@@ -2,19 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/user"
-        android:enabled="true"
-        android:icon="@drawable/users"
+        android:id="@+id/users"
+        android:icon="@drawable/ic_baseline_supervised_user_circle_24"
         android:title="@string/users"/>
+
     <item
         android:id="@+id/upload"
-        android:enabled="true"
-        android:icon="@drawable/upload"
+        android:icon="@drawable/ic_baseline_add_circle_outline_24"
         android:title="@string/Upload"/>
+
     <item
         android:id="@+id/profile"
-        android:enabled="true"
-        android:icon="@drawable/profile"
+        android:icon="@drawable/ic_baseline_account_circle_24"
         android:title="@string/profile"/>
+
+
 
 </menu>
