@@ -16,12 +16,22 @@ public class HomeActivity extends AppCompatActivity {
     private TextView textView3;
     private BottomNavigationView mBottomNavigationView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         /*textView3=findViewById(R.id.textView3);
         textView3.setText(ParseUser.getCurrentUser().getUsername().toString());*/
+
+
+        HomeActivity.this.setTitle("Instagram");
+
+
+
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileTab()).commit();
 
         mBottomNavigationView=findViewById(R.id.bottom_navigation_view);
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
