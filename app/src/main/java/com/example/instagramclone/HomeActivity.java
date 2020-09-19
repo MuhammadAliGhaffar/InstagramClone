@@ -1,32 +1,61 @@
 package com.example.instagramclone;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private TextView textView3;
+    private Toolbar mToolbar;
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout:
+                FancyToast.makeText(HomeActivity.this,"Logout is Pressed",FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
+                ParseUser.getCurrentUser().logOut();
+                Intent intent =new Intent(HomeActivity.this,LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
     private BottomNavigationView mBottomNavigationView;
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.option_menu,menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        /*textView3=findViewById(R.id.textView3);
-        textView3.setText(ParseUser.getCurrentUser().getUsername().toString());*/
+       mToolbar=findViewById(R.id.actiontoolbar);
+       setSupportActionBar(mToolbar);
+       getSupportActionBar().setTitle("Instagram");
 
 
-        HomeActivity.this.setTitle("Instagram");
+
 
 
 
