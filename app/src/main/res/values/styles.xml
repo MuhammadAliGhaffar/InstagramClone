@@ -8,6 +8,14 @@
 
     </style>
 
+    <style name="ToolbarfontStyling" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:fontFamily">@font/regualar</item>
+    
+    </style>
+    
+    <style name="ToolbarTextSizing" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">33sp</item>
+    </style>
 
 
 
