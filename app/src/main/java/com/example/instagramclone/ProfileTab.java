@@ -43,11 +43,21 @@ public class ProfileTab extends Fragment {
         textProfile.setText(ParseUser.getCurrentUser().getUsername().toString());
 
         final ParseUser parseUser = ParseUser.getCurrentUser();
-        edtProfileName.setText(parseUser.get("profileName").toString());
-        edtProfileBio.setText(parseUser.get("profileBio").toString());
-        edtProfileProfession.setText(parseUser.get("profileProfession").toString());
-        edtProfileHobbies.setText(parseUser.get("profileHobbies").toString());
-        edtProfileFavoriteSport.setText(parseUser.get("profileFavoriteSport").toString());
+
+        if(parseUser.get("profileName") == null || parseUser.get("profileBio") == null || parseUser.get("profileProfession") == null ||
+                parseUser.get("profileHobbies") == null || parseUser.get("profileFavoriteSport") == null){
+            edtProfileName.setHint("Enter a profile name");
+            edtProfileBio.setHint("Enter your bio");
+            edtProfileProfession.setHint("Enter your profession");
+            edtProfileHobbies.setHint("Enter your hobbies");
+            edtProfileFavoriteSport.setHint("Enter your favorite sport");
+        }else {
+            edtProfileName.setText(parseUser.get("profileName").toString());
+            edtProfileBio.setText(parseUser.get("profileBio").toString());
+            edtProfileProfession.setText(parseUser.get("profileProfession").toString());
+            edtProfileHobbies.setText(parseUser.get("profileHobbies").toString());
+            edtProfileFavoriteSport.setText(parseUser.get("profileFavoriteSport").toString());
+        }
 
 
         btnUpdateInfo.setOnClickListener(new View.OnClickListener() {
