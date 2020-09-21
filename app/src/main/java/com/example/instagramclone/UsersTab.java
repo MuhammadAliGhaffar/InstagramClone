@@ -37,7 +37,8 @@ public class UsersTab extends Fragment {
         ParseQuery<ParseUser> parseQuery = ParseUser.getQuery();
         parseQuery.whereNotEqualTo("username",ParseUser.getCurrentUser().getUsername());
         final ProgressDialog progressDialoggg=new ProgressDialog(getContext());
-        progressDialoggg.setMessage("Updating all users...");
+        progressDialoggg.setMessage("Please wait loading...");
+        progressDialoggg.setCanceledOnTouchOutside(false);
         progressDialoggg.show();
         parseQuery.findInBackground(new FindCallback<ParseUser>() {
             @Override

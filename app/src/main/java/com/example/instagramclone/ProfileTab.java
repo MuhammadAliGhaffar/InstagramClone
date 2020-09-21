@@ -70,6 +70,7 @@ public class ProfileTab extends Fragment {
                 parseUser.put("profileFavoriteSport",edtProfileFavoriteSport.getText().toString());
                 final ProgressDialog progressDialoggg=new ProgressDialog(getContext());
                 progressDialoggg.setMessage("Updating User Information");
+                progressDialoggg.setCanceledOnTouchOutside(false);
                 progressDialoggg.show();
 
                 parseUser.saveInBackground(new SaveCallback() {
