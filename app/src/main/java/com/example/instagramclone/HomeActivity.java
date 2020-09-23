@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileTab()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeTab()).commit();
 
         mBottomNavigationView=findViewById(R.id.bottom_navigation_view);
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -69,6 +69,10 @@ public class HomeActivity extends AppCompatActivity {
                 Fragment selectedFragment=null;
 
                 switch (item.getItemId()){
+                    case R.id.home1:
+                        selectedFragment=new HomeTab();
+                        FancyToast.makeText(HomeActivity.this,"Home is Tapped",FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
+                        break;
                     case R.id.users:
                         selectedFragment=new UsersTab();
                         FancyToast.makeText(HomeActivity.this,"Users is Tapped",FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
@@ -80,7 +84,6 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.profile:
                         selectedFragment=new ProfileTab();
                         FancyToast.makeText(HomeActivity.this,"Profile is Tapped",FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
-
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
