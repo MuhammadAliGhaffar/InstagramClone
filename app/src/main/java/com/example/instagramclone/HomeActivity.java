@@ -1,19 +1,32 @@
 package com.example.instagramclone;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.shashank.sony.fancytoastlib.FancyToast;
+
+import java.io.ByteArrayOutputStream;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -29,8 +42,76 @@ public class HomeActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 return true;
+            case R.id.camera:
+                FancyToast.makeText(HomeActivity.this,"Camera is Tapped",FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
+
+                if(android.os.Build.VERSION.SDK_INT>=23 && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                    requestPermissions(new String[]
+                            {Manifest.permission.READ_EXTERNAL_STORAGE},3000);
+                }else {
+                    captureCamera();
+                }
+
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 4000 && resultCode == RESULT_OK && data != null){
+            try {
+                Uri capturedImage =data.getData();
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),capturedImage);
+                ByteArrayOutputStream byteArrayOutputStream =new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+                byte[] bytes=byteArrayOutputStream.toByteArray();
+
+                ParseFile parseFile =new ParseFile("img.png",bytes);
+                ParseObject parseObject=new ParseObject("Photo");
+                parseObject.put("picture",parseFile);
+
+                parseObject.put("username", ParseUser.getCurrentUser().getUsername());
+                final ProgressDialog progressDialog =new ProgressDialog(HomeActivity.this);
+                progressDialog.setMessage("Uploading...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+                parseObject.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null){
+                            FancyToast.makeText(HomeActivity.this,"Done", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
+                        }else {
+                            FancyToast.makeText(HomeActivity.this,"Error: "+e.getMessage(), FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                        }
+
+                        progressDialog.dismiss();
+                    }
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void captureCamera() {
+        Intent intent =new Intent(Intent.ACTION_PICK,
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent,4000);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode==3000){
+            if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                captureCamera();
+            }
         }
 
     }

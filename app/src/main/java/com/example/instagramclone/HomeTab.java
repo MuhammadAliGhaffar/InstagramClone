@@ -1,6 +1,5 @@
 package com.example.instagramclone;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -41,10 +40,7 @@ public class HomeTab extends Fragment {
         linearLayout=view.findViewById(R.id.linearLayout);
         ParseQuery<ParseObject> parseQuery=new ParseQuery<ParseObject>("Photo");
         parseQuery.orderByDescending("createdAt");
-        final ProgressDialog progressDialog=new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+
         parseQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -93,7 +89,7 @@ public class HomeTab extends Fragment {
                     }
 
                 }
-                progressDialog.dismiss();
+
             }
         });
         return view;
